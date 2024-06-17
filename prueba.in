@@ -1,0 +1,12 @@
+// Declaración de variables
+var x = 10;
+var y = 5;
+var z = x + y;
+print(z);
+
+// Condicionales
+if (x > y) {
+    print("x es mayor que y");
+} else {
+    print("x no es mayor que y");
+}
