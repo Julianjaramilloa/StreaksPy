@@ -3,7 +3,6 @@ from streaks_lexer import lexer
 from streaks_parser import parser
 
 def process_input(input_text):
-    # Pasar el texto de entrada al lexer y parser
     lexer.input(input_text)
     result = parser.parse(input_text, lexer=lexer)
     return result
@@ -25,7 +24,6 @@ def main():
     
     while True:
         try:
-            # Leer entrada del usuario
             input_text = input('>>> ')
             if input_text.lower() == 'salir':
                 print("Cerrando el shell interactivo.")
@@ -34,7 +32,6 @@ def main():
                 filename = input_text.split(' ', 1)[1]
                 execute_file(filename)
             else:
-                # Procesar la entrada del usuario
                 result = process_input(input_text)
                 if result is not None and isinstance(result, str):
                     print(result)

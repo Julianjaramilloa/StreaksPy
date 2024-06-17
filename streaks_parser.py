@@ -2,7 +2,7 @@
 
 import ply.yacc as yacc
 from streaks_lexer import tokens
-from twoWayModel import TwoWayModel  # Importar el modelo
+from twoWayModel import TwoWayModel
 
 # Diccionario para almacenar las variables
 variables = {}
@@ -45,11 +45,13 @@ def p_statement(p):
                  | print_statement
                  | model_declaration
                  | model_operation
+                 | model_assign_r
                  | function_declaration
                  | return_statement
                  | continue_statement
                  | break_statement
                  | variable_query
+                 | comment_expression
                  | NEWLINE'''
     p[0] = p[1] if p[1] != '\n' else None
 
@@ -58,7 +60,9 @@ def p_var_declaration(p):
     '''var_declaration : VAR IDENTIFIER EQ numvar_expression SEMICOLON
                        | VAR IDENTIFIER EQ bool_expression SEMICOLON
                        | VAR IDENTIFIER EQ string_expression SEMICOLON
-                       | VAR IDENTIFIER EQ identifier_expression SEMICOLON'''
+                       | VAR IDENTIFIER EQ identifier_expression SEMICOLON
+                       | VAR IDENTIFIER EQ array SEMICOLON
+                       | VAR IDENTIFIER EQ matrix SEMICOLON'''
     variables[p[2]] = evaluate_expression(p[4])
     p[0] = ('var_declaration', p[2], p[4])
 
@@ -66,7 +70,9 @@ def p_assignment(p):
     '''assignment : IDENTIFIER EQ numvar_expression SEMICOLON
                   | IDENTIFIER EQ bool_expression SEMICOLON
                   | IDENTIFIER EQ string_expression SEMICOLON
-                  | IDENTIFIER EQ identifier_expression SEMICOLON'''
+                  | IDENTIFIER EQ identifier_expression SEMICOLON
+                  | IDENTIFIER EQ array SEMICOLON
+                  | IDENTIFIER EQ matrix SEMICOLON'''
     variables[p[1]] = evaluate_expression(p[3])
     p[0] = ('assignment', p[1], p[3])
 
@@ -123,12 +129,12 @@ def p_print_statement(p):
                        | PRINT LPAREN bool_expression RPAREN SEMICOLON
                        | PRINT LPAREN string_expression RPAREN SEMICOLON
                        | PRINT LPAREN identifier_expression RPAREN SEMICOLON'''
-    #print(evaluate_expression(p[3]))
+    print(evaluate_expression(p[3]))
     p[0] = ('print_statement', p[3])
 
 # Modelos y Operaciones con Modelos
 def p_model_declaration(p):
-    '''model_declaration : MODEL IDENTIFIER EQ LPAREN NUMBER COMMA NUMBER COMMA NUMBER COMMA matrix RPAREN SEMICOLON'''
+    '''model_declaration : MODEL IDENTIFIER EQ LPAREN NUMBER COMMA array COMMA array COMMA LBRACKET matrix RBRACKET RPAREN SEMICOLON'''
     variables[p[2]] = TwoWayModel(p[5], p[7], p[9], p[11])
     p[0] = ('model_declaration', p[2], p[5], p[7], p[9], p[11])
 
@@ -145,6 +151,17 @@ def p_model_operation(p):
     else:
         print(f"Error: '{p[1]}' no es un modelo válido")
     p[0] = ('model_operation', p[1], p[3])
+
+# Asignación de R a un modelo
+def p_model_assign_r(p):
+    '''model_assign_r : IDENTIFIER DOT IDENTIFIER EQ array SEMICOLON
+                      | IDENTIFIER DOT IDENTIFIER EQ matrix SEMICOLON'''
+    model = variables.get(p[1])
+    if isinstance(model, TwoWayModel) and p[3] == "R":
+        model.R = p[5]
+        p[0] = ('model_assign_r', p[1], p[3], p[5])
+    else:
+        print(f"Error: '{p[1]}' no es un modelo válido o '{p[3]}' no es un campo válido")
 
 # Funciones
 def p_function_declaration(p):
@@ -288,8 +305,16 @@ def p_empty(p):
 def p_error(p):
     if p:
         print(f"Syntax error at token '{p.value}', line {p.lineno}, type {p.type}")
+        # Mostrar el contexto del error, si está disponible
+        tok = parser.token()
+        while tok is not None:
+            if tok.lineno == p.lineno:
+                print(f"Context: {tok.value}", end=' ')
+            tok = parser.token()
+        print()  # Nueva línea después de mostrar el contexto
     else:
         print("Syntax error at EOF (End Of File)")
+
 
 # Construcción del Parser
 parser = yacc.yacc()
@@ -349,14 +374,10 @@ def execute_statements(statements):
         if statement:
             if isinstance(statement, tuple):
                 if statement[0] == 'var_declaration':
-                    print(f"Debug: var_declaration detected for {statement[1]} = {statement[2]}")  # Debugging statement
                     variables[statement[1]] = evaluate_expression(statement[2])
                 elif statement[0] == 'assignment':
-                    print(f"Debug: assignment detected for {statement[1]} = {statement[2]}")  # Debugging statement
                     variables[statement[1]] = evaluate_expression(statement[2])
-                    print(f"Debug: updated value of {statement[1]} = {variables[statement[1]]}")  # Debugging statement
                 elif statement[0] == 'if_statement':
-                    print(f"Debug: if_statement detected with condition {statement[1]}")  # Debugging statement
                     if evaluate_condition(statement[1]):
                         result = execute_statements(statement[2])
                     elif statement[3]:
@@ -364,35 +385,25 @@ def execute_statements(statements):
                     elif statement[4]:
                         result = execute_statements(statement[4][1])
                 elif statement[0] == 'while_statement':
-                    print(f"Debug: while_statement detected with condition {statement[1]}")  # Debugging statement
                     while evaluate_condition(statement[1]):
-                        print(f"Debug: while loop iteration with condition {statement[1]}")  # Debugging statement
                         result = execute_statements(statement[2])
-                        print(f"Debug: re-evaluated condition = {evaluate_condition(statement[1])}")  # Debugging statement
-                        # Agregamos una condición de escape para evitar el bucle infinito
                         if not evaluate_condition(statement[1]):
                             break
                 elif statement[0] == 'for_statement':
-                    print(f"Debug: for_statement detected")  # Debugging statement
                     execute_statements([statement[1]])
                     while evaluate_condition(statement[2]):
                         result = execute_statements(statement[4])
                         execute_statements([statement[3]])
                 elif statement[0] == 'print_statement':
-                    print(f"Debug: print_statement executing with value {statement[1]}")  # Debugging statement
                     result = evaluate_expression(statement[1])
                     print(result)
                 elif statement[0] == 'return_statement':
-                    print(f"Debug: return_statement detected with value {statement[1]}")  # Debugging statement
                     return evaluate_expression(statement[1])
                 elif statement[0] == 'break_statement':
-                    print(f"Debug: break_statement detected")  # Debugging statement
                     break
                 elif statement[0] == 'continue_statement':
-                    print(f"Debug: continue_statement detected")  # Debugging statement
                     continue
                 elif statement[0] == 'variable_query':
-                    print(f"Debug: variable_query detected for {statement[1]}")  # Debugging statement
                     result = f"{statement[1]} = {statement[2]}"
                     print(result)
     return result

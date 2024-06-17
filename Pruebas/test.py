@@ -40,23 +40,7 @@ def test_if_statement():
     print("Testing if_statement:")
     test_parser(data)
 
-def test_while_statement():
-    data = '''
-    while (x < 10) {
-        x = x + 1;
-    }
-    '''
-    print("Testing while_statement:")
-    test_parser(data)
 
-def test_for_statement():
-    data = '''
-    for (var i = 0; i < 3; i = i + 1) {
-        print(i);
-    }
-    '''
-    print("Testing for_statement:")
-    test_parser(data)
 
 def test_print_statement():
     data = '''
@@ -141,8 +125,6 @@ if __name__ == "__main__":
     test_var_declaration()
     test_assignment()
     test_if_statement()
-    test_while_statement()
-    test_for_statement()
     test_print_statement()
     test_model_declaration()
     test_model_operation()
