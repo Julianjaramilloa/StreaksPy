@@ -1,3 +1,5 @@
+# streaks_parser.py
+
 import ply.yacc as yacc
 from streaks_lexer import tokens
 from twoWayModel import TwoWayModel  # Importar el modelo
@@ -121,7 +123,7 @@ def p_print_statement(p):
                        | PRINT LPAREN bool_expression RPAREN SEMICOLON
                        | PRINT LPAREN string_expression RPAREN SEMICOLON
                        | PRINT LPAREN identifier_expression RPAREN SEMICOLON'''
-    print(evaluate_expression(p[3]))
+    #print(evaluate_expression(p[3]))
     p[0] = ('print_statement', p[3])
 
 # Modelos y Operaciones con Modelos
@@ -295,7 +297,6 @@ parser = yacc.yacc()
 # Funciones auxiliares
 
 def evaluate_condition(condition):
-    # Evaluar condiciones lógicas y de comparación
     if isinstance(condition, tuple):
         if condition[0] == 'logical':
             left = evaluate_condition(condition[2])
@@ -323,7 +324,6 @@ def evaluate_condition(condition):
         return condition
 
 def evaluate_expression(expression):
-    # Evaluar expresiones aritméticas y valores
     if isinstance(expression, tuple):
         if expression[0] == 'arithmetic':
             left = evaluate_expression(expression[2])
@@ -339,19 +339,24 @@ def evaluate_expression(expression):
             elif expression[1] == '^':
                 return left ** right
     else:
-        return expression
+        if isinstance(expression, int) or isinstance(expression, float):
+            return expression
+        return variables.get(expression, 0)
 
 def execute_statements(statements):
-    # Ejecutar una lista de declaraciones
     result = None
     for statement in statements:
         if statement:
             if isinstance(statement, tuple):
                 if statement[0] == 'var_declaration':
+                    print(f"Debug: var_declaration detected for {statement[1]} = {statement[2]}")  # Debugging statement
                     variables[statement[1]] = evaluate_expression(statement[2])
                 elif statement[0] == 'assignment':
+                    print(f"Debug: assignment detected for {statement[1]} = {statement[2]}")  # Debugging statement
                     variables[statement[1]] = evaluate_expression(statement[2])
+                    print(f"Debug: updated value of {statement[1]} = {variables[statement[1]]}")  # Debugging statement
                 elif statement[0] == 'if_statement':
+                    print(f"Debug: if_statement detected with condition {statement[1]}")  # Debugging statement
                     if evaluate_condition(statement[1]):
                         result = execute_statements(statement[2])
                     elif statement[3]:
@@ -359,24 +364,35 @@ def execute_statements(statements):
                     elif statement[4]:
                         result = execute_statements(statement[4][1])
                 elif statement[0] == 'while_statement':
+                    print(f"Debug: while_statement detected with condition {statement[1]}")  # Debugging statement
                     while evaluate_condition(statement[1]):
+                        print(f"Debug: while loop iteration with condition {statement[1]}")  # Debugging statement
                         result = execute_statements(statement[2])
+                        print(f"Debug: re-evaluated condition = {evaluate_condition(statement[1])}")  # Debugging statement
+                        # Agregamos una condición de escape para evitar el bucle infinito
+                        if not evaluate_condition(statement[1]):
+                            break
                 elif statement[0] == 'for_statement':
+                    print(f"Debug: for_statement detected")  # Debugging statement
                     execute_statements([statement[1]])
                     while evaluate_condition(statement[2]):
                         result = execute_statements(statement[4])
                         execute_statements([statement[3]])
                 elif statement[0] == 'print_statement':
+                    print(f"Debug: print_statement executing with value {statement[1]}")  # Debugging statement
                     result = evaluate_expression(statement[1])
                     print(result)
                 elif statement[0] == 'return_statement':
+                    print(f"Debug: return_statement detected with value {statement[1]}")  # Debugging statement
                     return evaluate_expression(statement[1])
                 elif statement[0] == 'break_statement':
+                    print(f"Debug: break_statement detected")  # Debugging statement
                     break
                 elif statement[0] == 'continue_statement':
+                    print(f"Debug: continue_statement detected")  # Debugging statement
                     continue
                 elif statement[0] == 'variable_query':
+                    print(f"Debug: variable_query detected for {statement[1]}")  # Debugging statement
                     result = f"{statement[1]} = {statement[2]}"
                     print(result)
-                # Aquí puedes agregar más lógica para manejar diferentes tipos de declaraciones
     return result
