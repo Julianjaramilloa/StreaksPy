@@ -4,13 +4,13 @@ model miModelo = (4.7, [-7.4, 1.2, 0.58], [5.4, -9.2], [
     [[23.8, 4.5, 3.6], [-0.5, 2.2], [-5.6]]
 ]);
 
-// Imprimir datos del modelo
-print(miModelo.total_datos());
-print(miModelo.total_datos_bloque(0));
-print(miModelo.total_datos_tratamiento(1));
-print(miModelo.datos_modelo());
-print(miModelo.datos_bloque(1));
-print(miModelo.datos_tratamiento(2));
+// Llamar a métodos del modelo
+miModelo.total_datos();
+miModelo.total_datos_bloque(0);
+miModelo.total_datos_tratamiento(1);
+miModelo.datos_modelo();
+miModelo.datos_bloque(1);
+miModelo.datos_tratamiento(2);
 
 // Definir matriz R de ejemplo para las rachas
 var R = [
@@ -21,12 +21,13 @@ var R = [
 // Asignar R al modelo para las operaciones de rachas
 miModelo.R = R;
 
-// Imprimir número total de rachas
-print(miModelo.total_runs(miModelo.R));
-print(miModelo.average_runs_per_cell(miModelo.R));
-print(miModelo.total_runs_block(miModelo.R));
-print(miModelo.total_runs_treatment(miModelo.R));
-print(miModelo.average_runs_block(miModelo.R));
-print(miModelo.average_runs_treatment(miModelo.R));
-print(miModelo.total_runs_model(miModelo.R));
-print(miModelo.average_runs_model(miModelo.R));
+// Llamar a métodos del modelo con la matriz R
+miModelo.total_runs(miModelo.R);
+miModelo.average_runs_per_cell(miModelo.R);
+miModelo.total_runs_block(miModelo.R);
+miModelo.total_runs_treatment(miModelo.R);
+miModelo.average_runs_block(miModelo.R);
+miModelo.average_runs_treatment(miModelo.R);
+miModelo.total_runs_model(miModelo.R);
+miModelo.average_runs_model(miModelo.R);
+

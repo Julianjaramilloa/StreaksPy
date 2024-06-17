@@ -45,14 +45,14 @@ def p_statement(p):
                  | print_statement
                  | model_declaration
                  | model_operation
+                 | model_operation_with_params
                  | model_assign_r
                  | function_declaration
                  | return_statement
                  | continue_statement
                  | break_statement
                  | variable_query
-                 | comment_expression
-                 | NEWLINE'''
+                 | comment_expression'''
     p[0] = p[1] if p[1] != '\n' else None
 
 # Declaración y Asignación de Variables
@@ -134,7 +134,7 @@ def p_print_statement(p):
 
 # Modelos y Operaciones con Modelos
 def p_model_declaration(p):
-    '''model_declaration : MODEL IDENTIFIER EQ LPAREN NUMBER COMMA array COMMA array COMMA LBRACKET matrix RBRACKET RPAREN SEMICOLON'''
+    '''model_declaration : MODEL IDENTIFIER EQ LPAREN NUMBER COMMA array COMMA array COMMA  matrixs RPAREN SEMICOLON'''
     variables[p[2]] = TwoWayModel(p[5], p[7], p[9], p[11])
     p[0] = ('model_declaration', p[2], p[5], p[7], p[9], p[11])
 
@@ -152,6 +152,37 @@ def p_model_operation(p):
         print(f"Error: '{p[1]}' no es un modelo válido")
     p[0] = ('model_operation', p[1], p[3])
 
+def p_model_operation_with_params(p):
+    '''model_operation_with_params : IDENTIFIER DOT IDENTIFIER LPAREN param_list RPAREN SEMICOLON'''
+    model = variables.get(p[1])
+    if isinstance(model, TwoWayModel):
+        method = getattr(model, p[3], None)
+        if method:
+            result = method(*p[5])
+            print(result)
+        else:
+            print(f"Error: El modelo '{p[1]}' no tiene el método '{p[3]}'")
+    else:
+        print(f"Error: '{p[1]}' no es un modelo válido")
+    p[0] = ('model_operation_with_params', p[1], p[3], p[5])
+
+def p_param_list(p):
+    '''param_list : param_list COMMA param
+                  | param
+                  | empty'''
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    elif len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = []
+
+def p_param(p):
+    '''param : numvar_expression
+             | bool_expression
+             | string_expression
+             | identifier_expression'''
+    p[0] = evaluate_expression(p[1])
 # Asignación de R a un modelo
 def p_model_assign_r(p):
     '''model_assign_r : IDENTIFIER DOT IDENTIFIER EQ array SEMICOLON
@@ -276,6 +307,18 @@ def p_elements(p):
     else:
         p[0] = []
 
+def p_matrixs(p):
+    '''matrixs : LBRACKET matrixs COMMA matrix  RBRACKET
+    | matrix
+    | empty'''
+    
+    if len(p) == 6:
+        p[0] = p[2] + [p[4]]
+    elif len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = []
+        
 def p_matrix(p):
     '''matrix : LBRACKET arrays RBRACKET'''
     p[0] = p[2]

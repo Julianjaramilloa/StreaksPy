@@ -20,8 +20,6 @@ tokens = (
     # Signos de puntuación
     'COMMA', 'SEMICOLON', 'DOT', 
     
-    # Token para nueva línea
-    'NEWLINE',
 
     # Palabras reservadas
     'RETURN', 'CONTINUE', 'BREAK', 'VAR',
@@ -113,10 +111,9 @@ t_SEMICOLON = r';'
 t_DOT = r'\.'  # Token para el operador de punto
 
 # Token para nuevas líneas
-def t_NEWLINE(t):
+def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-    return t
 
 # Comentarios
 def t_COMMENT(t):
