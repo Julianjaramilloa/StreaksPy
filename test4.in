@@ -1,0 +1,92 @@
+// Declaración del modelo con la matriz delta
+model myModel = (0.5, [1, 2], [3, 4], [
+    [
+        [1, 2],
+        [3, 4]
+    ],
+    [
+        [5, 6],
+        [7, 8]
+    ]
+]);
+
+// Imprimir el total de datos en el modelo
+print("Total de datos en el modelo:");
+myModel.total_datos();
+
+// Imprimir el total de datos en el bloque 0
+print("Total de datos en el bloque 0:");
+myModel.total_datos_bloque(0);
+
+// Imprimir el total de datos en el tratamiento 1
+print("Total de datos en el tratamiento 1:");
+myModel.total_datos_tratamiento(1);
+
+// Imprimir la matriz de datos del modelo
+print("Matriz de datos del modelo:");
+myModel.datos_modelo();
+
+// Imprimir los datos del bloque 0
+print("Datos del bloque 0:");
+myModel.datos_bloque(0);
+
+// Imprimir los datos del tratamiento 1
+print("Datos del tratamiento 1:");
+myModel.datos_tratamiento(1);
+
+// Definición de la matriz R para pruebas de rachas
+var R = [
+    [[1, 1], [2, 2]],
+    [[3, 3], [4, 4]]
+];
+
+// Imprimir el total de rachas en R
+print("Total de rachas en R:");
+myModel.total_runs(R);
+
+// Imprimir el promedio de rachas por celda en R
+print("Promedio de rachas por celda en R:");
+myModel.average_runs_per_cell(R);
+
+// Imprimir el total de rachas por bloque en R
+print("Total de rachas por bloque en R:");
+myModel.total_runs_block(R);
+
+// Imprimir el total de rachas por tratamiento en R
+print("Total de rachas por tratamiento en R:");
+myModel.total_runs_treatment(R);
+
+// Imprimir el promedio de rachas por bloque en R
+print("Promedio de rachas por bloque en R:");
+myModel.average_runs_block(R);
+
+// Imprimir el promedio de rachas por tratamiento en R
+print("Promedio de rachas por tratamiento en R:");
+myModel.average_runs_treatment(R);
+
+// Imprimir el total de rachas en todo el modelo R
+print("Total de rachas en todo el modelo R:");
+myModel.total_runs_model(R);
+
+// Imprimir el promedio de rachas en todo el modelo R
+print("Promedio de rachas en todo el modelo R:");
+myModel.average_runs_model(R);
+
+// Definición de una cadena para pruebas de la función contadora y número de rachas
+var cadena = "aaaabbbaaa";
+
+// Imprimir la función contadora para la cadena
+print("Función contadora para la cadena:");
+myModel.funcion_contadora(cadena);
+
+// Imprimir el número de rachas en la cadena
+print("Número de rachas en la cadena:");
+myModel.numero_de_rachas(cadena);
+
+// Imprimir la suma de rachas en la celda (0, 1)
+print("Suma de rachas en la celda (0, 1):");
+myModel.suma_de_rachas_celda(0, 1);
+
+// Imprimir el promedio de rachas en la celda (0, 1)
+print("Promedio de rachas en la celda (0, 1):");
+myModel.promedio_de_rachas_celda(0, 1);

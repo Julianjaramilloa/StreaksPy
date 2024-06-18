@@ -124,12 +124,24 @@ def p_for_update(p):
 
 # Impresión de Valores
 def p_print_statement(p):
-    '''print_statement : PRINT LPAREN numvar_expression RPAREN SEMICOLON
-                       | PRINT LPAREN bool_expression RPAREN SEMICOLON
-                       | PRINT LPAREN string_expression RPAREN SEMICOLON
-                       | PRINT LPAREN identifier_expression RPAREN SEMICOLON'''
-    print(evaluate_expression(p[3]))
+    '''print_statement : PRINT LPAREN print_arguments RPAREN SEMICOLON'''
+    print(" ".join(map(str, p[3])))
     p[0] = ('print_statement', p[3])
+
+def p_print_arguments(p):
+    '''print_arguments : print_arguments COMMA print_argument
+                       | print_argument'''
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
+
+def p_print_argument(p):
+    '''print_argument : numvar_expression
+                      | bool_expression
+                      | string_expression
+                      | identifier_expression'''
+    p[0] = evaluate_expression(p[1])
 
 # Modelos y Operaciones con Modelos
 def p_model_declaration(p):
@@ -144,7 +156,7 @@ def p_model_operation(p):
         method = getattr(model, p[3], None)
         if method:
             result = method()
-            print(result)
+            print(result)  # Imprimir el resultado del método
         else:
             print(f"Error: El modelo '{p[1]}' no tiene el método '{p[3]}'")
     else:
@@ -158,7 +170,7 @@ def p_model_operation_with_params(p):
         method = getattr(model, p[3], None)
         if method:
             result = method(*p[5])
-            print(result)
+            print(result)  # Imprimir el resultado del método
         else:
             print(f"Error: El modelo '{p[1]}' no tiene el método '{p[3]}'")
     else:
@@ -398,7 +410,7 @@ def evaluate_expression(expression):
     elif isinstance(expression, list):
         return [evaluate_expression(e) for e in expression]
     else:
-        if isinstance(expression, int) or isinstance(expression, float):
+        if isinstance(expression, int) or isinstance(expression, float) or isinstance(expression, bool):
             return expression
         return variables.get(expression, expression)
 
@@ -430,7 +442,7 @@ def execute_statements(statements):
                         execute_statements([statement[3]])
                 elif statement[0] == 'print_statement':
                     result = evaluate_expression(statement[1])
-                    print(result)
+                    #print(result)
                 elif statement[0] == 'return_statement':
                     return evaluate_expression(statement[1])
                 elif statement[0] == 'break_statement':

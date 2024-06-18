@@ -1,0 +1,67 @@
+// Declaración del modelo con la matriz delta 
+model myModel = (0.5, [1, 2], [3, 4], [
+    [
+        [1, 2],
+        [3, 4]
+    ],
+    [
+        [5, 6],
+        [7, 8]
+    ]
+]);
+
+// Operaciones de información del modelo
+print("Total de datos del modelo:");
+myModel.total_datos();
+
+print("Total de datos del bloque 0:");
+myModel.total_datos_bloque(0);
+
+print("Total de datos del tratamiento 1:");
+myModel.total_datos_tratamiento(1);
+
+print("Datos del modelo:");
+myModel.datos_modelo();
+
+print("Datos del bloque 1:");
+myModel.datos_bloque(1);
+
+print("Datos del tratamiento 0:");
+myModel.datos_tratamiento(0);
+
+// Definición de una nueva matriz R para realizar más operaciones
+var R = [
+    [
+        [9, 10],
+        [11, 12]
+    ],
+    [
+        [13, 14],
+        [15, 16]
+    ]
+];
+
+// Operaciones con la nueva matriz R
+print("Total de runs en la nueva matriz R:");
+myModel.total_runs(R);
+
+print("Promedio de runs por celda en la nueva matriz R:");
+myModel.average_runs_per_cell(R);
+
+print("Total de runs por bloque en la nueva matriz R:");
+myModel.total_runs_block(R);
+
+print("Total de runs por tratamiento en la nueva matriz R:");
+myModel.total_runs_treatment(R);
+
+print("Promedio de runs por bloque en la nueva matriz R:");
+myModel.average_runs_block(R);
+
+print("Promedio de runs por tratamiento en la nueva matriz R:");
+myModel.average_runs_treatment(R);
+
+print("Total de runs en el modelo con la nueva matriz R:");
+myModel.total_runs_model(R);
+
+print("Promedio de runs en el modelo con la nueva matriz R:");
+myModel.average_runs_model(R);
