@@ -1,27 +1,27 @@
 // Archivo de prueba: operaciones_con_variables.streaks
 
 // Declaración de variables con notación científica
-var a = 1.23e4  // 1.23 x 10^4
-var b = 4.56e-3 // 4.56 x 10^-3
-var c = 7.89e2  // 7.89 x 10^2
-var d = 3.21e-5 // 3.21 x 10^-5
+var a = 1.23e4;  // 1.23 x 10^4
+var b = 4.56e-3;// 4.56 x 10^-3
+var c = 7.89e2;  // 7.89 x 10^2
+var d = 3.21e-5; // 3.21 x 10^-5
 
 // Impresión de las variables
-print("Valores de las variables:")
-print("a = " + a)
-print("b = " + b)
-print("c = " + c)
-print("d = " + d)
+print("Valores de las variables:");
+print("a = " , a);
+print("b = " , b);
+print("c = " , c);
+print("d = " , d);
 
 // Operaciones entre las variables
-var suma = a + b + c + d
-var resta = a - b - c - d
-var multiplicacion = a * b * c * d
-var division = a / b / c / d
+var suma = a + b + c + d;
+var resta = a - b - c - d;
+var multiplicacion = a * b * c * d;
+var division = a / b / c / d;
 
 // Impresión de los resultados
-print("\nResultados de las operaciones:")
-print("Suma: " + suma)
-print("Resta: " + resta)
-print("Multiplicación: " + multiplicacion)
-print("División: " + division)
+print("Resultados de las operaciones:");
+print("Suma: ", suma);
+print("Resta: ", resta);
+print("Multiplicación: ", multiplicacion);
+print("División: ", division);

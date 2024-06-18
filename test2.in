@@ -1,46 +1,46 @@
 // Archivo de prueba: sentencia_if.streaks
 
 // Declaración de variables
-var x = 10
-var y = 5
-var z = 20
+var x = 10;
+var y = 5;
+var z = 20;
 
 // Uso de la sentencia if
-print("Uso de la sentencia if:")
+print("Uso de la sentencia if:");
 
 // Comparar x y y
 if (x > y) {
-    print("x es mayor que y")
+    print("x es mayor que y");
 } else {
-    print("x no es mayor que y")
+    print("x no es mayor que y");
 }
 
 // Comparar y y z
 if (y < z) {
-    print("y es menor que z")
+    print("y es menor que z");
 } else {
-    print("y no es menor que z")
+    print("y no es menor que z");
 }
 
 // Comparar x y z
 if (x == z) {
-    print("x es igual a z")
+    print("x es igual a z");
 } else {
-    print("x no es igual a z")
+    print("x no es igual a z");
 }
 
 // Uso de la sentencia if con notación científica
-var a = 1.23e4  // 1.23 x 10^4
-var b = 4.56e-3 // 4.56 x 10^-3
+var a = 1.23e4;  // 1.23 x 10^4
+var b = 4.56e-3; // 4.56 x 10^-3
 
 if (a > b) {
-    print("a es mayor que b")
+    print("a es mayor que b");
 } else {
-    print("a no es mayor que b")
+    print("a no es mayor que b");
 }
 
 if (b < a) {
-    print("b es menor que a")
+    print("b es menor que a");
 } else {
-    print("b no es menor que a")
+    print("b no es menor que a");
 }

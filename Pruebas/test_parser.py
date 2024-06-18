@@ -9,7 +9,7 @@ from streaks_parser import parser
 def test_parser():
     data = '''
     model m = (4.7, [-7.4, 1.2, 0.58], [5.4, -9.2], [[15.9, -4.0, 66.1], [-6.1, 3.9, 4.2]]);
-    print(m.total_datos());
+    m.total_datos();
 
     var x = 5;
     var y = -3.14;
