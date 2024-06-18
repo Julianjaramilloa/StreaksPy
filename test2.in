@@ -1,41 +1,46 @@
-// Declaración del modelo con la matriz delta directamente
-model myModel = (0.5, [1, 2], [3, 4], [
-    [
-        [1, 2],
-        [3, 4]
-    ],
-    [
-        [5, 6],
-        [7, 8]
-    ]
-]);
+// Archivo de prueba: sentencia_if.streaks
 
-// Operaciones de información del modelo
-myModel.total_datos();
-myModel.total_datos_bloque(0);
-myModel.total_datos_tratamiento(1);
-myModel.datos_modelo();
-myModel.datos_bloque(1);
-myModel.datos_tratamiento(0);
+// Declaración de variables
+var x = 10
+var y = 5
+var z = 20
 
-// Definición de una nueva matriz R para realizar más operaciones
-var R = [
-    [
-        [9, 10],
-        [11, 12]
-    ],
-    [
-        [13, 14],
-        [15, 16]
-    ]
-];
+// Uso de la sentencia if
+print("Uso de la sentencia if:")
 
-// Operaciones con la nueva matriz R
-myModel.total_runs(R);
-myModel.average_runs_per_cell(R);
-myModel.total_runs_block(R);
-myModel.total_runs_treatment(R);
-myModel.average_runs_block(R);
-myModel.average_runs_treatment(R);
-myModel.total_runs_model(R);
-myModel.average_runs_model(R);
+// Comparar x y y
+if (x > y) {
+    print("x es mayor que y")
+} else {
+    print("x no es mayor que y")
+}
+
+// Comparar y y z
+if (y < z) {
+    print("y es menor que z")
+} else {
+    print("y no es menor que z")
+}
+
+// Comparar x y z
+if (x == z) {
+    print("x es igual a z")
+} else {
+    print("x no es igual a z")
+}
+
+// Uso de la sentencia if con notación científica
+var a = 1.23e4  // 1.23 x 10^4
+var b = 4.56e-3 // 4.56 x 10^-3
+
+if (a > b) {
+    print("a es mayor que b")
+} else {
+    print("a no es mayor que b")
+}
+
+if (b < a) {
+    print("b es menor que a")
+} else {
+    print("b no es menor que a")
+}

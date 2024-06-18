@@ -1,15 +1,27 @@
-// Declarar el modelo de dos vías
-model miModelo = (4.7, [-7.4, 1.2, 0.58], [5.4, -9.2], [
-    [[15.9, -4.0, 66.1], [-6.1, 3.9], [4.2, -1.3, 12.4, 5.8]],
-    [[23.8, 4.5, 3.6], [-0.5, 2.2], [-5.6]]
-]);
+// Archivo de prueba: operaciones_con_variables.streaks
 
-// Llamar a métodos del modelo
-miModelo.total_datos();
-miModelo.total_datos_bloque(0);
-miModelo.total_datos_tratamiento(1);
-miModelo.datos_modelo();
-miModelo.datos_bloque(1);
-miModelo.datos_tratamiento(2);
+// Declaración de variables con notación científica
+var a = 1.23e4  // 1.23 x 10^4
+var b = 4.56e-3 // 4.56 x 10^-3
+var c = 7.89e2  // 7.89 x 10^2
+var d = 3.21e-5 // 3.21 x 10^-5
 
+// Impresión de las variables
+print("Valores de las variables:")
+print("a = " + a)
+print("b = " + b)
+print("c = " + c)
+print("d = " + d)
 
+// Operaciones entre las variables
+var suma = a + b + c + d
+var resta = a - b - c - d
+var multiplicacion = a * b * c * d
+var division = a / b / c / d
+
+// Impresión de los resultados
+print("\nResultados de las operaciones:")
+print("Suma: " + suma)
+print("Resta: " + resta)
+print("Multiplicación: " + multiplicacion)
+print("División: " + division)
