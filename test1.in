@@ -12,22 +12,4 @@ miModelo.datos_modelo();
 miModelo.datos_bloque(1);
 miModelo.datos_tratamiento(2);
 
-// Definir matriz R de ejemplo para las rachas
-var R = [
-    [[2, 1, 3], [1, 1], [1, 1, 2, 1]],
-    [[3, 2, 1], [1, 1], [1]]
-];
-
-// Asignar R al modelo para las operaciones de rachas
-miModelo.R = R;
-
-// Llamar a métodos del modelo con la matriz R
-miModelo.total_runs(miModelo.R);
-miModelo.average_runs_per_cell(miModelo.R);
-miModelo.total_runs_block(miModelo.R);
-miModelo.total_runs_treatment(miModelo.R);
-miModelo.average_runs_block(miModelo.R);
-miModelo.average_runs_treatment(miModelo.R);
-miModelo.total_runs_model(miModelo.R);
-miModelo.average_runs_model(miModelo.R);
 

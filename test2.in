@@ -1,5 +1,41 @@
-var matriz = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
+// Declaración del modelo con la matriz delta directamente
+model myModel = (0.5, [1, 2], [3, 4], [
+    [
+        [1, 2],
+        [3, 4]
+    ],
+    [
+        [5, 6],
+        [7, 8]
+    ]
+]);
+
+// Operaciones de información del modelo
+myModel.total_datos();
+myModel.total_datos_bloque(0);
+myModel.total_datos_tratamiento(1);
+myModel.datos_modelo();
+myModel.datos_bloque(1);
+myModel.datos_tratamiento(0);
+
+// Definición de una nueva matriz R para realizar más operaciones
+var R = [
+    [
+        [9, 10],
+        [11, 12]
+    ],
+    [
+        [13, 14],
+        [15, 16]
+    ]
 ];
+
+// Operaciones con la nueva matriz R
+myModel.total_runs(R);
+myModel.average_runs_per_cell(R);
+myModel.total_runs_block(R);
+myModel.total_runs_treatment(R);
+myModel.average_runs_block(R);
+myModel.average_runs_treatment(R);
+myModel.total_runs_model(R);
+myModel.average_runs_model(R);

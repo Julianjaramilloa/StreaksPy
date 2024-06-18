@@ -1,5 +1,3 @@
-# streaks_parser.py
-
 import ply.yacc as yacc
 from streaks_lexer import tokens
 from twoWayModel import TwoWayModel
@@ -62,7 +60,8 @@ def p_var_declaration(p):
                        | VAR IDENTIFIER EQ string_expression SEMICOLON
                        | VAR IDENTIFIER EQ identifier_expression SEMICOLON
                        | VAR IDENTIFIER EQ array SEMICOLON
-                       | VAR IDENTIFIER EQ matrix SEMICOLON'''
+                       | VAR IDENTIFIER EQ matrix SEMICOLON
+                       | VAR IDENTIFIER EQ matrixs SEMICOLON'''
     variables[p[2]] = evaluate_expression(p[4])
     p[0] = ('var_declaration', p[2], p[4])
 
@@ -134,7 +133,7 @@ def p_print_statement(p):
 
 # Modelos y Operaciones con Modelos
 def p_model_declaration(p):
-    '''model_declaration : MODEL IDENTIFIER EQ LPAREN NUMBER COMMA array COMMA array COMMA  matrixs RPAREN SEMICOLON'''
+    '''model_declaration : MODEL IDENTIFIER EQ LPAREN NUMBER COMMA array COMMA array COMMA matrixs RPAREN SEMICOLON'''
     variables[p[2]] = TwoWayModel(p[5], p[7], p[9], p[11])
     p[0] = ('model_declaration', p[2], p[5], p[7], p[9], p[11])
 
@@ -183,7 +182,7 @@ def p_param(p):
              | string_expression
              | identifier_expression'''
     p[0] = evaluate_expression(p[1])
-# Asignación de R a un modelo
+
 def p_model_assign_r(p):
     '''model_assign_r : IDENTIFIER DOT IDENTIFIER EQ array SEMICOLON
                       | IDENTIFIER DOT IDENTIFIER EQ matrix SEMICOLON'''
@@ -249,7 +248,6 @@ def p_numvar(p):
     else:
         p[0] = variables.get(p[1], 0)
 
-# Expresiones Booleanas
 def p_bool_expression(p):
     '''bool_expression : bool_expression AND bool_expression
                        | bool_expression OR bool_expression
@@ -262,7 +260,6 @@ def p_bool_expression(p):
     else:
         p[0] = ('logical', p[2], p[1], p[3])
 
-# Expresiones de Comparación
 def p_comparison_expression(p):
     '''comparison_expression : numvar_expression EQ numvar_expression
                              | numvar_expression NE numvar_expression
@@ -276,7 +273,6 @@ def p_comparison_expression(p):
                              | bool_expression EE bool_expression'''
     p[0] = ('comparison', p[2], p[1], p[3])
 
-# Expresiones de Identificadores y Cadenas
 def p_string_expression(p):
     '''string_expression : STRING'''
     p[0] = p[1]
@@ -285,7 +281,6 @@ def p_identifier_expression(p):
     '''identifier_expression : IDENTIFIER'''
     p[0] = variables.get(p[1], p[1])
 
-# Condiciones
 def p_condition(p):
     '''condition : comparison_expression
                  | bool_expression'''
@@ -308,17 +303,16 @@ def p_elements(p):
         p[0] = []
 
 def p_matrixs(p):
-    '''matrixs : LBRACKET matrixs COMMA matrix  RBRACKET
-    | matrix
-    | empty'''
-    
+    '''matrixs : LBRACKET matrixs COMMA matrix RBRACKET
+               | matrix
+               | empty'''
     if len(p) == 6:
         p[0] = p[2] + [p[4]]
     elif len(p) == 2:
         p[0] = [p[1]]
     else:
         p[0] = []
-        
+
 def p_matrix(p):
     '''matrix : LBRACKET arrays RBRACKET'''
     p[0] = p[2]
@@ -339,12 +333,10 @@ def p_comment_expression(p):
     '''comment_expression : COMMENT STRING'''
     pass
 
-# Producción Vacía
 def p_empty(p):
     '''empty :'''
     p[0] = None
 
-# Manejo de Errores
 def p_error(p):
     if p:
         print(f"Syntax error at token '{p.value}', line {p.lineno}, type {p.type}")
@@ -358,11 +350,8 @@ def p_error(p):
     else:
         print("Syntax error at EOF (End Of File)")
 
-
 # Construcción del Parser
 parser = yacc.yacc()
-
-# Funciones auxiliares
 
 def evaluate_condition(condition):
     if isinstance(condition, tuple):
@@ -406,10 +395,12 @@ def evaluate_expression(expression):
                 return left / right
             elif expression[1] == '^':
                 return left ** right
+    elif isinstance(expression, list):
+        return [evaluate_expression(e) for e in expression]
     else:
         if isinstance(expression, int) or isinstance(expression, float):
             return expression
-        return variables.get(expression, 0)
+        return variables.get(expression, expression)
 
 def execute_statements(statements):
     result = None
